@@ -41,7 +41,7 @@ document.addEventListener('keydown', (event) => {
     var name = event.key;
     if (name === 'Insert') {
       if (enabled === false){
-		  div.style = "z-index: 999; position: absolute; left: 1%; bottom: 1%; grid-template-rows: 1fr 1fr 1fr; grid-template-columns: 5% 60% 20% 5%; display: grid; background-color: rgb(44, 44, 67); border-radius: 10px; column-gap: 10px"
+		  div.style = "z-index: 2147483647; position: absolute; left: 1%; bottom: 1%; grid-template-rows: 1fr 1fr 1fr; grid-template-columns: 5% 60% 20% 5%; display: grid; background-color: rgb(44, 44, 67); border-radius: 10px; column-gap: 10px"
 		  enabled = true
 	  } 
 	  else {
