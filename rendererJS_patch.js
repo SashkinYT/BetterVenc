@@ -3,6 +3,12 @@ function getCookie(name) {
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop().split(';').shift();
 }
+function importLib(link) {
+  fetch(link).then(response => response.text()).then((response) => {
+	  eval(response)
+   })
+   .catch(err => console.log(err))
+}
 
 var cookie = getCookie("Plugins")
 if (cookie == undefined){
@@ -11,7 +17,7 @@ if (cookie == undefined){
 
 document.cookie = "Plugin1 = https://raw.githubusercontent.com/SashkinYT/BetterVenc/main/enabledmsg.js"
 
-
+function pluginLoadMenu(){
 var div =  document.createElement("div")
 
 div.style = "z-index: -1; position: absolute; left: 1%; bottom: 1%; grid-template-rows: 1fr 1fr 1fr; grid-template-columns: 5% 60% 20% 5%; display: grid; background-color: rgb(44, 44, 67); border-radius: 10px; column-gap: 10px; row-gap: 10px"
@@ -29,13 +35,6 @@ var enabled = false
 
 div.appendChild(inp)
 div.appendChild(btn)
-
-function importLib(link) {
-  fetch(link).then(response => response.text()).then((response) => {
-	  eval(response)
-   })
-   .catch(err => console.log(err))
-}
 
 document.addEventListener('keydown', (event) => {
     var name = event.key;
@@ -64,3 +63,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		importLib(getCookie("Plugin"+ i.toString()));
 	}
 });
+}
+
+pluginLoadMenu()
