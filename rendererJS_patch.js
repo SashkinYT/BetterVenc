@@ -71,8 +71,6 @@ function addPluginToList(pluginName, defaultSettings){
     return settingsCookie
 }
 
-pluginsListGUIBase()
-
 function pluginLoadMenu(){
 var div =  document.createElement("div")
 
@@ -109,6 +107,7 @@ document.addEventListener('keydown', (event) => {
 }, false);
 
 document.addEventListener("DOMContentLoaded", function(event) {
+    pluginsListGUIBase()
     document.body.appendChild(div)
     document.getElementById('ok_button_vc').addEventListener("click", function(){
 	importLib(inp.value)
