@@ -56,6 +56,9 @@ function addPluginToList(pluginName, defaultSettings){
     var btn =  document.createElement("button")
     btn.style = "border: 1px solid; color: rgb(44, 44, 67); background-color: springgreen; right: 5%; width: 28%; position: absolute; height: 28%; top: 40%;"
     btn.innerHTML = "Save Settings"
+    btn.onclick = function(){
+	    setBVCPluginSettings(pluginName, inp.value)
+    }
     div.appendChild(btn)
     div.appendChild(inp)
     var settingsCookie = getCookie(pluginName + "Settings")
