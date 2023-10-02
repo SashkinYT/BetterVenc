@@ -10,7 +10,7 @@ function importLib(link) {
    .catch(err => console.log(err))
 }
 
-var cookie = getCookie("Plugins")
+var cookie = getCookie("PluginsCount")
 if (cookie == undefined){
 	document.cookie = "PluginsCount=1"
 }
