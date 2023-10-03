@@ -1,21 +1,86 @@
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-}
 function importLib(link) {
-  fetch(link).then(response => response.text()).then((response) => {
-	  eval(response)
-   })
-   .catch(err => console.log(err))
-}
+    fetch(link).then(response => response.text()).then((response) => {
+        eval(response)
+     })
+     .catch(err => console.log(err))
+  }
 
-var cookie = getCookie("PluginsCount")
-if (cookie == undefined){
-	document.cookie = "PluginsCount=1"
-}
+var AllBVCSettings = {}
 
-document.cookie = "Plugin1 = https://raw.githubusercontent.com/SashkinYT/BetterVenc/main/enabledmsg.js"
+function getAllBVCSettings(){
+    const request = indexedDB.open("BetterVenc", 1);
+request.onupgradeneeded = function () {
+  //1
+  const db = request.result;
+
+  //2
+  const PLstore = db.createObjectStore("Plugins", { keyPath: "key" });
+
+  //3
+  PLstore.createIndex("url", ["url"], { unique: false });
+};
+
+
+request.onsuccess = function () {
+
+  const db = request.result;
+
+  // 1
+  const transaction = db.transaction("Plugins", "readwrite");
+
+  //2
+  const store = transaction.objectStore("Plugins");
+  const urlIndex = store.index("url");
+
+  //3
+  const settings = store.getAll()
+  settings.onsuccess = ()=>{
+  for (let i = 0; i < settings.result.length; i++) {
+      AllBVCSettings[settings.result[i].key] = settings.result[i].settings
+  }
+  }
+  // 6
+  transaction.oncomplete = function () {
+    db.close();
+  };
+}}
+
+setInterval(()=>{getAllBVCSettings()},100)
+
+function BVCEnabledMSG(){
+    const request = indexedDB.open("BetterVenc", 1);
+request.onupgradeneeded = function () {
+  //1
+  const db = request.result;
+
+  //2
+  const PLstore = db.createObjectStore("Plugins", { keyPath: "key" });
+
+  //3
+  PLstore.createIndex("url", ["url"], { unique: false });
+    PLstore.createIndex("settings", ["settings"], { unique: false });
+};
+
+request.onsuccess = function () {
+
+  const db = request.result;
+
+  // 1
+  const transaction = db.transaction("Plugins", "readwrite");
+
+  //2
+  const store = transaction.objectStore("Plugins");
+
+  //3
+  store.put({ key:"BVCEnabledMessage", url:"https://raw.githubusercontent.com/SashkinYT/BetterVenc/main/enabledmsg.js"});
+    
+  // 6
+  transaction.oncomplete = function () {
+    db.close();
+  };
+};
+}
+BVCEnabledMSG()
 
 function pluginsListGUIBase(){
     var div =  document.createElement("div")
@@ -34,13 +99,45 @@ function pluginsListGUIBase(){
 var BVCpluginsCount = 0
 
 function getBVCPluginSettings(pluginName){
-    var settingsCookie = getCookie(pluginName + "Settings")
-    return settingsCookie
+    return AllBVCSettings[pluginName]
 }
 
 function setBVCPluginSettings(pluginName, settings){
-    document.cookie = pluginName+"Settings="+settings
-}
+    const request = indexedDB.open("BetterVenc", 1);
+request.onupgradeneeded = function () {
+  //1
+  const db = request.result;
+
+  //2
+  const PLstore = db.createObjectStore("Plugins", { keyPath: "key" });
+
+  //3
+  PLstore.createIndex("url", ["url"], { unique: false });
+};
+
+
+request.onsuccess = function () {
+
+  const db = request.result;
+
+  // 1
+  const transaction = db.transaction("Plugins", "readwrite");
+
+  //2
+  const store = transaction.objectStore("Plugins");
+  const urlIndex = store.index("url");
+
+  //3
+  const plSettings = store.get(pluginName)
+  plSettings.onsuccess = ()=>{
+      store.put({key: pluginName,url: plSettings.result.url,settings: settings})
+  }
+  
+  // 6
+  transaction.oncomplete = function () {
+    db.close();
+  };
+}}
 
 function addPluginToList(pluginName, defaultSettings){
     var div = document.createElement("div")
@@ -61,9 +158,9 @@ function addPluginToList(pluginName, defaultSettings){
     }
     div.appendChild(btn)
     div.appendChild(inp)
-    var settingsCookie = getCookie(pluginName + "Settings")
+    var settingsCookie = getBVCPluginSettings(pluginName)
     if(settingsCookie == undefined){
-	    document.cookie = pluginName+"Settings="+defaultSettings
+	    setBVCPluginSettings(pluginName,defaultSettings)
         inp.value = defaultSettings
     } else {
         inp.value = settingsCookie
@@ -109,19 +206,91 @@ document.addEventListener('keydown', (event) => {
     }
 }, false);
 
+function BVCAddPluginToAutoLoad(url){
+    fetch(url).then(response => response.text()).then((response) => {
+        var strings = response.split("\n")
+        var pluginN = strings[0].split("//PluginName: ")[1]
+        var defaultSettings = strings[1].split("//DefaultSettings: ")[1]
+        const request = indexedDB.open("BetterVenc", 1);
+request.onupgradeneeded = function () {
+  //1
+  const db = request.result;
+
+  //2
+  const PLstore = db.createObjectStore("Plugins", { keyPath: "key" });
+
+  //3
+  PLstore.createIndex("url", ["url"], { unique: false });
+};
+
+
+    request.onsuccess = function () {
+
+    const db = request.result;
+
+    // 1
+    const transaction = db.transaction("Plugins", "readwrite");
+
+    //2
+    const store = transaction.objectStore("Plugins");
+
+    //3
+    store.put({key: pluginN, url:url, settings:defaultSettings})
+    
+    // 6
+    transaction.oncomplete = function () {
+        db.close();
+    };
+    }
+     })
+     .catch(err => console.log(err))
+}
+
 document.addEventListener("DOMContentLoaded", function(event) {
     pluginsListGUIBase()
     document.body.appendChild(div)
     document.getElementById('ok_button_vc').addEventListener("click", function(){
 	importLib(inp.value)
-	pluginsC = Number(getCookie("PluginsCount")) + 1
-	document.cookie = "PluginsCount="+pluginsC.toString()
-	document.cookie = "Plugin"+pluginsC.toString() + "=" + inp.value
+	BVCAddPluginToAutoLoad(inp.value)
 });
-	pluginsC = Number(getCookie("PluginsCount"))
-	for (let i = 1; i < pluginsC+1; i++) {
-		importLib(getCookie("Plugin"+ i.toString()));
-	}
+const request = indexedDB.open("BetterVenc", 1);
+request.onupgradeneeded = function () {
+  //1
+  const db = request.result;
+
+  //2
+  const PLstore = db.createObjectStore("Plugins", { keyPath: "key" });
+
+  //3
+  PLstore.createIndex("url", ["url"], { unique: false });
+};
+
+
+    request.onsuccess = function () {
+
+    const db = request.result;
+
+    // 1
+    const transaction = db.transaction("Plugins", "readwrite");
+
+    //2
+    const store = transaction.objectStore("Plugins");
+
+    //3
+    var pluginsListGet = store.getAll()
+    pluginsListGet.onsuccess = ()=>{
+        var pluginsList = pluginsListGet.result
+        pluginsC = pluginsList.length
+        for (let i = 0; i < pluginsC; i++) {
+            importLib(pluginsList[i].url);
+        }
+    }
+    
+    // 6
+    transaction.oncomplete = function () {
+        db.close();
+    };
+    }
 });
 }
 
