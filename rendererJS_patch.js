@@ -145,13 +145,13 @@ function addPluginToList(pluginName, defaultSettings){
     div.style = "position: absolute; top: "+((BVCpluginsCount*47)+2).toString()+"%; background-color: rgba(60,60,60); height: 45%; border: 0px solid; border-radius: 20px; width: 90%; left: 5%"
     var h1 = document.createElement("div")
     h1.innerHTML = pluginName
-    h1.style = "color: springgreen; font-size: 5vh; position: relative; left: 5%; top: 5%;"
+    h1.style = "color: springgreen; font-size: 3.5vw; position: relative; left: 5%; top: 5%;"
     div.appendChild(h1)
     var inp =  document.createElement("input")
-    inp.style = "border: 1px solid; color: springgreen; background-color: rgb(44, 44, 67); position: relative; left: 5%; top: 4vh; height: 30%; width: 60%;"
+    inp.style = "border: 1px solid; color: springgreen; background-color: rgb(44, 44, 67); position: absolute; left: 5%; top: 35%; height: 30%; width: 60%;"
     inp.placeholder = "Settings"
     var btn =  document.createElement("button")
-    btn.style = "border: 1px solid; color: rgb(44, 44, 67); background-color: springgreen; right: 5%; width: 28%; position: absolute; height: 28%; top: 40%;"
+    btn.style = "border: 1px solid; color: rgb(44, 44, 67); background-color: springgreen; right: 5%; width: 28%; position: absolute; height: 28%; top: 36%;"
     btn.innerHTML = "Save Settings"
     btn.onclick = function(){
 	    setBVCPluginSettings(pluginName, inp.value)
