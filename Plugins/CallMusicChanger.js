@@ -1,5 +1,5 @@
 //PluginName: CallMusicChanger
-//DefaultSettings: https://discord.com/assets/b9411af07f154a6fef543e7e442e4da9.mp3
+//DefaultSettings: discord.com/assets/b9411af07f154a6fef543e7e442e4da9.mp3
 addPluginToList("CallMusicChanger", "discord.com/assets/b9411af07f154a6fef543e7e442e4da9.mp3")
 var CSCBVCcallmusic = getBVCPluginSettings("CallMusicChanger")
 function changeCallMusic(music){
