@@ -5,7 +5,7 @@ var CSCBVCcallmusic = getBVCPluginSettings("CallMusicChanger")
 function changeCallMusic(music){
     var play = Audio.prototype.play;
     Audio.prototype.play = function() {
-    this.src = this.src.replace('https://discord.com/assets/e72bd9a68c5a5de4b084.mp3', music)
+    this.src = this.src.replace('https://discord.com/assets/3c6cc93eaab97c478abe.mp3', music)
     return play.apply(this, arguments)
 }
 }
