@@ -10,6 +10,7 @@ function changeCallMusic(music){
     return play.apply(this, arguments)
 }
 }
+console.log("TestTestTest")
 changeCallMusic(CSCBVCcallmusic)
 setInterval(()=>{
     if(CSCBVCcallmusic!=getBVCPluginSettings("CallMusicChanger")){
