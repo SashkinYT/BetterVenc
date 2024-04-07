@@ -6,6 +6,7 @@ function changeCallMusic(music){
     var play = Audio.prototype.play;
     Audio.prototype.play = function() {
     this.src = this.src.replace('https://discord.com/assets/5d7cf81bcfad674c638d.mp3', music)
+    console.log(this.src)
     return play.apply(this, arguments)
 }
 }
